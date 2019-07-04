@@ -18,11 +18,14 @@ class User(BaseModel):
 
     @property
     def password(self):
-        return None
+        return self._password
 
     @password.setter
     def password(self, value):
         self._password = generate_password_hash(value)
 
     def check_password(self, password):
-        return check_password_hash(self.password_hash, password)
+        return check_password_hash(self._password, password)
+
+    def __repr__(self):
+        return f'User: {self.username}'
