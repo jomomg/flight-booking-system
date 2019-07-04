@@ -9,6 +9,7 @@ class Config:
     DEBUG = False
     TESTING = False
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URI')
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 class ProductionConfig(Config):

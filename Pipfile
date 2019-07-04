@@ -4,6 +4,7 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+pytest = "*"
 
 [packages]
 python-dotenv = "*"
@@ -11,6 +12,7 @@ flask = "*"
 flask-restful = "*"
 flask-sqlalchemy = "*"
 flask-migrate = "*"
+psycopg2 = "*"
 
 [requires]
 python_version = "3.7"
