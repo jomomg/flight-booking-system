@@ -16,7 +16,7 @@ class BaseModel(db.Model):
     __abstract__ = True
 
     id = db.Column(
-        db.String(36),
+        db.String(22),
         default=generate_key,
         primary_key=True)
 
