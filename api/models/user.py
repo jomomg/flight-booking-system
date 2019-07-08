@@ -10,7 +10,7 @@ class User(BaseModel):
     email = db.Column(db.String(255), unique=True)
     username = db.Column(db.String(60), unique=True)
     _password = db.Column(db.String(128))
-    passport_no = db.Column(db.String(20))
+    passport = db.Column(db.String(20), unique=True)
 
     @property
     def full_name(self):

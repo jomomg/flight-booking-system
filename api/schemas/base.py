@@ -8,7 +8,7 @@ class BaseSchema(Schema):
 
     def load_json(self, data):
         """
-        Deserialize JSON data and return a model object.
+        Deserialize JSON data and return a validated python dict.
         Raises a ValidationError exception if an error is encountered
         during deserialization.
         """

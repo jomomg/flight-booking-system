@@ -24,8 +24,12 @@ def create_app(config):
     app = Flask(__name__)
     app.config.from_object(config)
 
+    from api import views
+
+    api.add_resource(views.Register, '/auth/register')
+
     db.init_app(app)
-    migrate.init_app(app)
+    migrate.init_app(app, db)
 
     app.register_blueprint(api_blueprint)
     return app
