@@ -27,6 +27,7 @@ def create_app(config):
     from api import views
 
     api.add_resource(views.Register, '/auth/register')
+    api.add_resource(views.Login, '/auth/login')
 
     db.init_app(app)
     migrate.init_app(app, db)

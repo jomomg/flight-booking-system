@@ -14,6 +14,7 @@ flask-sqlalchemy = "*"
 flask-migrate = "*"
 psycopg2 = "*"
 marshmallow = "*"
+pyjwt = "*"
 
 [requires]
 python_version = "3.7"
