@@ -10,7 +10,15 @@ from api.models import User
 
 
 def create_token(user_claims):
-    """Create JWT token"""
+    """Creates a JWT token
+
+    Args:
+        user_claims (dict): The user information to be included in the token
+
+    Returns:
+        token (str): A valid JWT token
+    """
+
     secret_key = os.getenv('SECRET_KEY')
     expiration_time = int(os.getenv('JWT_EXPIRES', 60))
     payload = {
@@ -23,7 +31,18 @@ def create_token(user_claims):
 
 
 def decode_token(token):
-    """Decode JWT token"""
+    """Decodes JWT token.
+
+    Args:
+        token: The JWT token to be decoded.
+
+    Raises:
+        AuthenticationError: If token has expired or the token is invalid for
+            any reason.
+
+    Returns:
+        decoded (dict): The decoded token.
+    """
     secret_key = os.getenv('SECRET_KEY')
     try:
         decoded = jwt.decode(token, secret_key, algorithms='HS256')
@@ -36,7 +55,15 @@ def decode_token(token):
 
 
 def get_token():
-    """Retrieve token from authorization header"""
+    """Retrieves token from authorization header.
+
+    Raises:
+        AuthenticationError: If no token is provided or the Authorization
+            header is not well formed.
+
+    Returns:
+        token (str): The token included in the `Authorization` header.
+    """
     token_string = request.headers.get('Authorization')
     if not token_string:
         raise AuthenticationError('no token provided')
@@ -49,7 +76,17 @@ def get_token():
 
 
 def token_required(fn):
-    """Decorator to ensure that a valid token is included in a request"""
+    """Decorator to ensure that a valid token is included in a request.
+
+    Decodes the token included in the request and raises an error if the
+    token is not valid.
+
+    Args:
+        fn: The function to be decorated.
+
+    Returns:
+        decorated (func): The decorated function.
+    """
     @wraps(fn)
     def decorated(*args, **kwargs):
         token = get_token()
