@@ -12,19 +12,20 @@ from api.utils.token_authentication import token_required
 from api.models import Photo
 
 
-class FileUploadList(Resource):
-    """Resource class for the file upload endpoint"""
+class PhotoUpload(Resource):
+    """Resource class for the photo upload endpoint"""
 
     @token_required
     def post(self):
-        """View function for handling file uploads
+        """View function for handling photo uploads.
 
-        Takes an image file as input and saves it in the filesystem
+        Takes an image file as input and saves it in the filesystem. The
+        most recently uploaded image is set as the user's default photo.
 
         Returns:
             If successful, returns a payload with the following attributes
-              - filename: the filename of the uploaded file
-              - file_url: the url that can be used to retrieve the file
+              - status: success
+              - message: file upload successful
             else, the following error response is returned
               - status: error
               - message: invalid file extension
@@ -34,40 +35,30 @@ class FileUploadList(Resource):
             raise ValidationError('no file specified')
         file = request.files['file']
         if file and is_valid_file_extension(file.filename):
-            filename = f'{request.user.id}_{secure_filename(file.filename)}'
+            photo = Photo().save()
+            filename = f'{photo.id}_{secure_filename(file.filename)}'
             file_path = os.path.join(
                 current_app.config['PHOTO_UPLOAD_FOLDER'],
                 filename)
             file.save(file_path)
-            photo = Photo(path=file_path)
+            photo.path = file_path
             photo.save()
             request.user.photo_id = photo.id
             request.user.save()
-            ret = {
-                'filename': filename,
-                'file_url': f'{request.url_root}uploads/{filename}'
-            }
-            return success_('file upload successful', data=ret)
+            return success_('file upload successful')
         return error_('invalid file extension'), 400
 
-
-class FileUploadDetail(Resource):
-    """Resource class foe retrieving an uploaded file"""
-
     @token_required
-    def get(self, filename):
-        """Retrieves an uploaded file
-
-        Args:
-            filename (str): filename of the file to be retrieved
+    def get(self):
+        """Retrieves a user's photo.
 
         Returns:
-            If successful, it returns the uploaded file
+            If successful, it returns the uploaded photo.
         """
-
         try:
+            photo = request.user.photo
             return send_from_directory(
                 current_app.config['PHOTO_UPLOAD_FOLDER'],
-                filename)
+                photo.path[8:])
         except NotFound:
             return error_('file not found'), 404

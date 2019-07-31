@@ -1,9 +1,10 @@
-def success_(message, data):
+def success_(message, data=None):
     response = {
         'status': 'success',
         'message': message,
-        'data': data
     }
+    if data:
+        response['data'] = data
     return response
 
 

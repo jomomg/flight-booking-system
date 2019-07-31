@@ -3,6 +3,7 @@ import base64
 import datetime as dt
 
 from app import db
+from api.utils.exceptions import NotFoundError
 
 
 def generate_key():
@@ -24,6 +25,13 @@ class BaseModel(db.Model):
         db.session.add(self)
         db.session.commit()
         return self
+
+    @classmethod
+    def get_or_404(cls, object_id):
+        record = cls.query.get(object_id)
+        if not record:
+            raise NotFoundError(f'{cls.__name__.lower()} not found')
+        return record
 
 
 class CommonTimeFieldsMixin:

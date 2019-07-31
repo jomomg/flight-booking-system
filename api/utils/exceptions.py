@@ -24,3 +24,8 @@ class ValidationError(APIError):
 class AuthenticationError(APIError):
     message = 'invalid authentication credentials'
     status_code = 401
+
+
+class NotFoundError(APIError):
+    message = 'object not found'
+    status_code = 404

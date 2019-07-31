@@ -32,8 +32,8 @@ def create_app(config):
 
     flask_api.add_resource(views.Register, '/auth/register')
     flask_api.add_resource(views.Login, '/auth/login')
-    flask_api.add_resource(views.FileUploadList, '/uploads')
-    flask_api.add_resource(views.FileUploadDetail, '/uploads/<filename>')
+    flask_api.add_resource(views.PhotoUpload, '/user/photo')
+    # flask_api.add_resource(views.FileUploadDetail, '/uploads/<photo_id>')
 
     app.register_blueprint(api_bp)
     return app

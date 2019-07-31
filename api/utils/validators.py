@@ -3,6 +3,8 @@ import re
 from marshmallow import ValidationError
 from flask import current_app
 
+from api.utils.helpers import get_file_extension
+
 
 def email_validator(email):
     email_regex = r'^[a-zA-Z0-9-._]+@[a-zA-Z0-9-_]+\.[a-zA-Z]{3,5}$'
@@ -27,6 +29,5 @@ def validate_unique_field(model, field):
 
 
 def is_valid_file_extension(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in \
-           current_app.config['ALLOWED_FILE_EXTENSIONS']
+    return '.' in filename and get_file_extension(filename) in \
+        current_app.config['ALLOWED_FILE_EXTENSIONS']
