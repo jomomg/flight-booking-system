@@ -3,17 +3,17 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_restful import Api
 
-from api import api as api_blueprint
+from api import api_bp
 from api.utils.exceptions import APIError
 
 
-api = Api(api_blueprint)
+flask_api = Api(api_bp)
 
 db = SQLAlchemy()
 migrate = Migrate()
 
 
-@api_blueprint.errorhandler(APIError)
+@api_bp.errorhandler(APIError)
 def handle_api_exceptions(error):
     response = jsonify(error.to_dict())
     response.status_code = error.status_code
@@ -24,13 +24,16 @@ def create_app(config):
     app = Flask(__name__)
     app.config.from_object(config)
 
-    from api import views
-
-    api.add_resource(views.Register, '/auth/register')
-    api.add_resource(views.Login, '/auth/login')
-
     db.init_app(app)
     migrate.init_app(app, db)
 
-    app.register_blueprint(api_blueprint)
+    from api import models
+    from api import views
+
+    flask_api.add_resource(views.Register, '/auth/register')
+    flask_api.add_resource(views.Login, '/auth/login')
+    flask_api.add_resource(views.FileUploadList, '/uploads')
+    flask_api.add_resource(views.FileUploadDetail, '/uploads/<filename>')
+
+    app.register_blueprint(api_bp)
     return app

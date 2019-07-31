@@ -27,7 +27,5 @@ class BaseModel(db.Model):
 
 
 class CommonTimeFieldsMixin:
-    __abstract__ = True
-
     created_at = db.Column(db.DateTime, default=dt.datetime.utcnow)
     updated_at = db.Column(db.DateTime, onupdate=dt.datetime.utcnow)

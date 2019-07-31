@@ -30,7 +30,6 @@ class UserSchema(BaseSchema):
         validate=string_length_validator(8))
     username = fields.String(
         required=True,
-        load_only=True,
         validate=([
             string_length_validator(4),
             validate_unique_field(User, 'username')]))

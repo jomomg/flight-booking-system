@@ -10,6 +10,9 @@ class Config:
     TESTING = False
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URI')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    PHOTO_UPLOAD_FOLDER = 'uploads'
+    MAX_CONTENT_LENGTH = 4 * 1024 * 1024
+    ALLOWED_FILE_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 
 class ProductionConfig(Config):

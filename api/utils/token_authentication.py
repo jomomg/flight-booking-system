@@ -42,7 +42,7 @@ def get_token():
         raise AuthenticationError('no token provided')
     if not token_string.startswith('Bearer '):
         raise AuthenticationError('token should be preceded by the keyword Bearer')
-    if len(token_string.split() < 2):
+    if len(token_string.split()) < 2:
         raise AuthenticationError('invalid authorization header')
     _, token = token_string.split()
     return token
