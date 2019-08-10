@@ -46,7 +46,10 @@ class PhotoUpload(Resource):
             request.user.photo_id = photo.id
             request.user.save()
             return success_('photo upload successful')
-        return error_('invalid file extension'), 400
+        allowed_extensions = ', '.join(
+            current_app.config['ALLOWED_FILE_EXTENSIONS'])
+        return error_(
+            f'invalid file extension, must be one of {allowed_extensions}'), 400
 
     @token_required
     def get(self):
@@ -57,6 +60,8 @@ class PhotoUpload(Resource):
         """
         try:
             photo = request.user.photo
+            if not photo:
+                raise NotFound
             return send_from_directory(
                 current_app.config['PHOTO_UPLOAD_FOLDER'],
                 photo.path[8:])
