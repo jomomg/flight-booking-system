@@ -5,7 +5,7 @@ from flask_restful import Resource
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import NotFound
 
-from api.utils.exceptions import ValidationError
+from api.utils.exceptions import ValidationError, NotFoundError
 from api.utils.validators import is_valid_file_extension
 from api.utils.responses import success_, error_
 from api.utils.token_authentication import token_required
@@ -67,3 +67,13 @@ class PhotoUpload(Resource):
                 photo.path[8:])
         except NotFound:
             return error_('no photo found'), 404
+
+    @token_required
+    def delete(self):
+        """Deletes a user's photo"""
+        photo = request.user.photo
+        if not photo:
+            raise NotFoundError('no photo found')
+        else:
+            photo.delete()
+        return '', 204

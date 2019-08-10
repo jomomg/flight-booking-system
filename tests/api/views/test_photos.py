@@ -57,8 +57,8 @@ class TestPhotoUploads:
         assert from_json(rv.data)['message'] == \
             'invalid file extension, must be one of png, jpg, jpeg, gif'
 
-    def test_uploading_oversize_photo_fails(self, init_db, client, auth_header):
-        # make a large file
+    def test_uploading_oversize_photo_fails(
+            self, init_db, client, auth_header):
         large_file = 'test_large.jpg'
         file_size = current_app.config['MAX_CONTENT_LENGTH'] * 2
         with open(large_file, 'wb') as file:
@@ -71,9 +71,17 @@ class TestPhotoUploads:
             assert rv.status_code == 413
         os.remove(large_file)
 
-    def test_retrieving_non_existent_photo_returns_404(self, init_db, client, auth_header):
+    def test_retrieving_non_existent_photo_returns_404(
+            self, init_db, client, auth_header, from_json):
         rv = client.get(self.url, headers=auth_header)
         assert rv.status_code == 404
+        assert from_json(rv.data)['message'] == 'no photo found'
 
-    def test_deleting_uploaded_photo_succeeds(self):
-        pass
+    def test_deleting_uploaded_photo_succeeds(self, client, auth_header):
+        file_data = io.BytesIO(b'test image')
+        client.post(
+            self.url,
+            data={'file': (file_data, 'test.jpg')},
+            headers=auth_header)
+        rv = client.delete(self.url, headers=auth_header)
+        assert rv.status_code == 204
