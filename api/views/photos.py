@@ -45,7 +45,7 @@ class PhotoUpload(Resource):
             photo.save()
             request.user.photo_id = photo.id
             request.user.save()
-            return success_('file upload successful')
+            return success_('photo upload successful')
         return error_('invalid file extension'), 400
 
     @token_required
@@ -61,4 +61,4 @@ class PhotoUpload(Resource):
                 current_app.config['PHOTO_UPLOAD_FOLDER'],
                 photo.path[8:])
         except NotFound:
-            return error_('file not found'), 404
+            return error_('no photo found'), 404

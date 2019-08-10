@@ -26,6 +26,10 @@ class BaseModel(db.Model):
         db.session.commit()
         return self
 
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
     @classmethod
     def get_or_404(cls, object_id):
         record = cls.query.get(object_id)
