@@ -9,14 +9,13 @@ from api.utils.token_authentication import create_token
 from api.schemas import UserSchema
 from api.models import User
 
+from .base import BaseListResource
 
-class Register(Resource):
-    def post(self):
-        schema = UserSchema()
-        user = schema.load_json(request.data)
-        user.save()
-        payload = schema.dump(user).data
-        return success_('registration successful', data=payload), 201
+
+class Register(BaseListResource):
+    model = User
+    schema_class = UserSchema
+    authenticate = False
 
 
 class Login(Resource):

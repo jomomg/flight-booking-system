@@ -11,5 +11,8 @@ class Booking(BaseModel, CommonTimeFieldsMixin):
         db.String(22),
         db.ForeignKey('flight_sessions.id'))
     seat_id = db.Column(db.String(22), db.ForeignKey('flight_session_seats.id'))
-    flight_session = db.relationship('Booking', backref='bookings', lazy=True)
+    flight_session = db.relationship(
+        'FlightSession',
+        backref='bookings',
+        lazy=True)
     seat = db.relationship('FlightSessionSeat', backref='bookings', lazy=True)

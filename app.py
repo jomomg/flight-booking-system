@@ -20,6 +20,11 @@ def handle_api_exceptions(error):
     return response
 
 
+def register_urls(urls):
+    for url in urls:
+        flask_api.add_resource(*url)
+
+
 def create_app(config):
     app = Flask(__name__)
     app.config.from_object(config)
@@ -30,10 +35,7 @@ def create_app(config):
     from api import models
     from api import views
 
-    flask_api.add_resource(views.Register, '/auth/register')
-    flask_api.add_resource(views.Login, '/auth/login')
-    flask_api.add_resource(views.PhotoUpload, '/user/photo')
-    # flask_api.add_resource(views.FileUploadDetail, '/uploads/<photo_id>')
+    register_urls(views.URLS)
 
     app.register_blueprint(api_bp)
     return app

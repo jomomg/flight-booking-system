@@ -36,7 +36,3 @@ class UserSchema(BaseSchema):
     passport = fields.String(
         required=True,
         validate=validate_unique_field(User, 'passport'))
-
-    @post_load
-    def make_user_object(self, data):
-        return User(**data)
