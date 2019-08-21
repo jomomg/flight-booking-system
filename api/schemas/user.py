@@ -1,4 +1,4 @@
-from marshmallow import fields, post_load, validates, ValidationError
+from marshmallow import fields, post_load
 
 from .base import BaseSchema
 from api.models import User
