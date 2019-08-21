@@ -14,6 +14,7 @@ class User(BaseModel):
     _password = db.Column(db.String(128))
     passport = db.Column(db.String(20), unique=True)
     photo_id = db.Column(db.String(22), db.ForeignKey('photo.id'))
+    bookings = db.relationship('Booking', backref='user', lazy=True)
 
     @property
     def full_name(self):
